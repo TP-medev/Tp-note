@@ -21,7 +21,7 @@ public class jeuPendu {
      * Constructeur du jeu.
      */
     public jeuPendu() {
-        this.dictionary = new jeuPendu();
+        this.dictionary = new Dicomanag();
         this.maxErrors = 7; // Valeur par défaut
     }
     
