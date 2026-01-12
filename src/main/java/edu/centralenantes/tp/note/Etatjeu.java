@@ -14,7 +14,7 @@ import java.util.Set;
 public class Etatjeu {
         
     /**
-     * Énumération des états possibles d'une partie
+     * états possibles partie
      */
     public enum Status {
         /** Partie en cours */
@@ -25,21 +25,21 @@ public class Etatjeu {
         LOST
     }
     
-    private final String secretWord;
-    private final Set<Character> guessedLetters;
-    private final int maxErrors;
-    private int errorCount;
+    private final String secretWord; //mot à deviner
+    private final Set<Character> guessedLetters; //lettres devinées
+    private final int maxErrors; //nombres d'erreurs max
+    private int errorCount; //compteur du nombre d'erreur
     private Status status;
     
     /**
-     * Constructeur d'une nouvelle partie.
+     * Constructeur d'une nouvelle partie
      * 
      * @param secretWord le mot à deviner (ne doit pas être null ou vide)
      * @param maxErrors le nombre maximal d'erreurs autorisées (doit être positif)
-     * @throws IllegalArgumentException si les paramètres sont invalides
+     * @throws IllegalArgumentException 
      */
     public Etatjeu(String secretWord, int maxErrors) {
-        if (secretWord == null || secretWord.trim().isEmpty()) {
+        if (secretWord == null || secretWord.trim().isEmpty()) { //trim retire les espaces
             throw new IllegalArgumentException("Le mot secret ne peut pas être vide");
         }
         if (maxErrors <= 0) {
@@ -48,18 +48,18 @@ public class Etatjeu {
         
         this.secretWord = secretWord.toUpperCase();
         this.maxErrors = maxErrors;
-        this.guessedLetters = new HashSet<>();
+        this.guessedLetters = new HashSet<>(); // le set nous permet de s'affranchir des doublons
         this.errorCount = 0;
         this.status = Status.IN_PROGRESS;
     }
     
     /**
-     * Propose une lettre pour deviner le mot.
+     * Propose une lettre pour deviner le mot
      * 
      * @param letter la lettre proposée
      * @return true si la lettre était dans le mot, false sinon
-     * @throws IllegalArgumentException si la lettre n'est pas valide
-     * @throws IllegalStateException si la partie est terminée
+     * @throws IllegalArgumentException 
+     * @throws IllegalStateException 
      */
     public boolean guessLetter(char letter) {
         if (status != Status.IN_PROGRESS) {
@@ -68,11 +68,11 @@ public class Etatjeu {
         
         char upperLetter = Character.toUpperCase(letter);
         
-        if (!Character.isLetter(upperLetter)) {
+        if (!Character.isLetter(upperLetter)) { //caractère alphabétique uniquement
             throw new IllegalArgumentException("Seules les lettres sont autorisées");
         }
         
-        // Si la lettre a déjà été proposée, on ne compte pas d'erreur
+        // Si la lettre a déjà été proposé pas d'erreur
         if (guessedLetters.contains(upperLetter)) {
             return secretWord.indexOf(upperLetter) >= 0;
         }
@@ -97,7 +97,7 @@ public class Etatjeu {
     }
     
     /**
-     * Vérifie si le mot est entièrement découvert.
+     * Vérifie si le mot est entièrement deviné
      * 
      * @return true si toutes les lettres ont été trouvées
      */
@@ -111,8 +111,8 @@ public class Etatjeu {
     }
     
     /**
-     * Retourne l'état courant du mot avec les lettres révélées.
-     * Les lettres non devinées sont remplacées par des underscores.
+     * Retourne l'état courant du mot avec les lettres révélées
+     * Les lettres non devinées sont remplacées par des underscores (ex _ A _ _ E) ;
      * 
      * @return le mot partiellement révélé
      */
@@ -167,21 +167,21 @@ public class Etatjeu {
     }
     
     /**
-     * @return true si la partie est terminée (gagnée ou perdue)
+     * @return true si la partie est terminée (gagnée/perdue)
      */
     public boolean isGameOver() {
         return status != Status.IN_PROGRESS;
     }
     
     /**
-     * @return le mot secret (révélé uniquement en fin de partie)
+     * @return le mot secret 
      */
     public String getSecretWord() {
         return secretWord;
     }
     
     /**
-     * Vérifie si une lettre a déjà été proposée.
+     * Vérifie si une lettre a déjà été proposée
      * 
      * @param letter la lettre à vérifier
      * @return true si la lettre a déjà été proposée
