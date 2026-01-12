@@ -32,7 +32,7 @@ public class jeuPendu {
      */
     public static void main(String[] args) {
         jeuPendu game = new jeuPendu();
-        game.run();
+        game.run(); 
     }
     
     /**
