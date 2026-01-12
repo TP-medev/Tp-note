@@ -86,4 +86,19 @@ public class Dicomanag {
         int index = random.nextInt(words.size());
         return words.get(index);
     }
+    
+    public int getWordCount() {
+        return words.size();
+    }
+    
+    public void addWord(String word) {
+        if (!isValidWord(word)) {
+            throw new IllegalArgumentException("Le mot doit contenir uniquement des lettres");
+        }
+        words.add(word.toUpperCase());
+    }
+    
+    public void clear() {
+        words.clear();
+    }
 }
