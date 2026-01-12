@@ -75,5 +75,15 @@ public class Dicomanag {
         }
         return true;
     }
-    
+        
+    public String getRandomWord() {
+        if (words.isEmpty()) {
+            throw new IllegalStateException(
+                "Aucun mot disponible. Veuillez d'abord charger un dictionnaire."
+            );
+        }
+        
+        int index = random.nextInt(words.size());
+        return words.get(index);
+    }
 }
