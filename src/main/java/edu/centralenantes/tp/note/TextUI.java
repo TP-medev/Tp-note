@@ -29,7 +29,7 @@ public class TextUI {
         System.out.print("\nVotre choix : ");
         
         return readInteger(0, 2);
-        
+    }
         public int askMaxErrors() {
         System.out.print("\nNombre maximal d'erreurs autorisées (6 ou 7 recommandé) : ");
         return readInteger(1, 20);
@@ -110,13 +110,13 @@ public class TextUI {
     }
     
     
-    public void displayGameResult(GameState gameState) {
+    public void displayGameResult(Etatjeu gameState) {
         clearScreen();
         System.out.println("\n" + display.getDisplay(gameState.getErrorCount()));
         
         System.out.println("\n╔════════════════════════════════════╗");
         
-        if (gameState.getStatus() == GameState.Status.WON) {
+        if (gameState.getStatus() == Etatjeu.Status.WON) {
             System.out.println("║          🎉 VICTOIRE ! 🎉          ║");
             System.out.println("╚════════════════════════════════════╝");
             System.out.println("\nFélicitations ! Vous avez trouvé le mot : " 
