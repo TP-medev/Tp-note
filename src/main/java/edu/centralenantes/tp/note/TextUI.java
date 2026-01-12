@@ -4,10 +4,13 @@
  */
 package edu.centralenantes.tp.note;
 
+import java.util.Scanner;
+
 /**
  *
  * @author rompe
  */
 public class TextUI {
-    
+    private final Scanner scanner;
+    private final Affichagependu display;
 }
