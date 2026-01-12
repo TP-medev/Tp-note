@@ -13,4 +13,9 @@ import java.util.Scanner;
 public class TextUI {
     private final Scanner scanner;
     private final Affichagependu display;
+    
+    public TextUI(int maxErrors) {
+        this.scanner = new Scanner(System.in);
+        this.display = new Affichagependu(maxErrors);
+    }
 }
