@@ -18,4 +18,16 @@ public class TextUI {
         this.scanner = new Scanner(System.in);
         this.display = new Affichagependu(maxErrors);
     }
+    
+    public int showMainMenu() {
+        System.out.println("\n╔════════════════════════════════════╗");
+        System.out.println("║        JEU DU PENDU - MEDEV        ║");
+        System.out.println("╚════════════════════════════════════╝");
+        System.out.println("\n1. Mode 1 joueur (mot aléatoire)");
+        System.out.println("2. Mode 2 joueurs (choisir le mot)");
+        System.out.println("0. Quitter");
+        System.out.print("\nVotre choix : ");
+        
+        return readInteger(0, 2);
+    }
 }
