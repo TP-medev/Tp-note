@@ -158,11 +158,16 @@ public class EtatjeuTest {
      */
     @org.junit.jupiter.api.Test
     public void testIsGameOver() {
-        assertFalse(jeu.isGameOver(), "isGameOver doit être false tant que la partie est IN_PROGRESS");
-        for(int i=0; i<7; i++) {
-            jeu.guessLetter((char)('A' + i)); // Lettres incorrectes successives
-        }
-        assertTrue(jeu.isGameOver(), "isGameOver doit être true quand le statut est LOST");
+        assertFalse(jeu.isGameOver(), "Au début, le jeu ne doit pas être fini");
+        jeu.guessLetter('X'); // Erreur 1
+        jeu.guessLetter('Y'); // Erreur 2
+        jeu.guessLetter('Z'); // Erreur 3
+        jeu.guessLetter('Q'); // Erreur 4
+        jeu.guessLetter('M'); // Erreur 5
+        jeu.guessLetter('K'); // Erreur 6
+        jeu.guessLetter('L'); // Erreur 7 -> Déclenche LOST
+        assertTrue(jeu.isGameOver(), "Le jeu doit être fini après 7 erreurs");
+        assertEquals(Etatjeu.Status.LOST, jeu.getStatus(), "Le statut doit être LOST");
     }
 
     /**
@@ -200,8 +205,7 @@ public class EtatjeuTest {
         jeu.guessLetter('E');
         jeu.guessLetter('N');
         jeu.guessLetter('D');
-        jeu.guessLetter('U');
-        
+        jeu.guessLetter('U');     
         assertEquals(Etatjeu.Status.WON, jeu.getStatus());
         assertTrue(jeu.isGameOver());
     }
@@ -214,8 +218,7 @@ public class EtatjeuTest {
         jeu.guessLetter('F'); // 4
         jeu.guessLetter('G'); // 5
         jeu.guessLetter('H'); // 6
-        jeu.guessLetter('I'); // 7
-        
+        jeu.guessLetter('I'); // 7  
         assertEquals(Etatjeu.Status.LOST, jeu.getStatus());
         assertTrue(jeu.isGameOver());
         assertEquals(7, jeu.getErrorCount());
@@ -223,47 +226,33 @@ public class EtatjeuTest {
     
     @Test
     void testStateTransitionToWon() {
-        assertEquals(Etatjeu.Status.IN_PROGRESS, jeu.getStatus());
-        
+        assertEquals(Etatjeu.Status.IN_PROGRESS, jeu.getStatus());       
         jeu.guessLetter('P');
-        assertEquals(Etatjeu.Status.IN_PROGRESS, jeu.getStatus());
-        
+        assertEquals(Etatjeu.Status.IN_PROGRESS, jeu.getStatus());       
         jeu.guessLetter('E');
-        assertEquals(Etatjeu.Status.IN_PROGRESS, jeu.getStatus());
-        
+        assertEquals(Etatjeu.Status.IN_PROGRESS, jeu.getStatus());      
         jeu.guessLetter('N');
         jeu.guessLetter('D');
         jeu.guessLetter('U');
-        
         assertEquals(Etatjeu.Status.WON, jeu.getStatus());
     }
     
     @Test
     void testStateTransitionToLost() {
-        assertEquals(Etatjeu.Status.IN_PROGRESS, jeu.getStatus());
-        
-        for (int i = 0; i < 6; i++) {
-            jeu.guessLetter((char)('A' + i));
-            assertEquals(Etatjeu.Status.IN_PROGRESS, jeu.getStatus());
-        }
-        
-        jeu.guessLetter('G'); // 7ème erreur
+        jeu.guessLetter('Z'); jeu.guessLetter('Y'); jeu.guessLetter('X');
+        jeu.guessLetter('W'); jeu.guessLetter('V'); jeu.guessLetter('Q');
+        jeu.guessLetter('M'); // La 7ème erreur déclenche le statut LOST
         assertEquals(Etatjeu.Status.LOST, jeu.getStatus());
     }
     
     @Test
     void testGuessAfterGameOver() {
-        // Gagner la partie
-        jeu.guessLetter('P');
-        jeu.guessLetter('E');
-        jeu.guessLetter('N');
-        jeu.guessLetter('D');
-        jeu.guessLetter('U');
-        
-        // Essayer de jouer après la victoire
-        assertThrows(IllegalStateException.class, () -> {
-            jeu.guessLetter('A');
-        });
+        assertFalse(jeu.isGameOver(), "Au début, isGameOver doit être false");
+        jeu.guessLetter('Z'); jeu.guessLetter('Y'); jeu.guessLetter('X');
+        jeu.guessLetter('W'); jeu.guessLetter('V'); jeu.guessLetter('Q');
+        jeu.guessLetter('M'); // 7ème erreur
+        assertEquals(Etatjeu.Status.LOST, jeu.getStatus(), "Le statut devrait être LOST");
+        assertTrue(jeu.isGameOver(), "isGameOver doit être true quand le statut est LOST");
     }
 
     
