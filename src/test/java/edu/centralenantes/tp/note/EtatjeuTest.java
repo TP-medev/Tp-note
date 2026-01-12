@@ -184,5 +184,87 @@ public class EtatjeuTest {
         assertTrue(jeu.hasBeenGuessed('p')); // Insensible à la casse
 
     }
+    @Test
+    void testGuessNonAlphabeticLetter() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            jeu.guessLetter('1');
+        });
+        assertThrows(IllegalArgumentException.class, () -> {
+            jeu.guessLetter('@');
+        });
+    }
+    
+    @Test
+    void testWinCondition() {
+        jeu.guessLetter('P');
+        jeu.guessLetter('E');
+        jeu.guessLetter('N');
+        jeu.guessLetter('D');
+        jeu.guessLetter('U');
+        
+        assertEquals(Etatjeu.Status.WON, jeu.getStatus());
+        assertTrue(jeu.isGameOver());
+    }
+    
+    @Test
+    void testLoseCondition() {
+        jeu.guessLetter('A'); // 1
+        jeu.guessLetter('B'); // 2
+        jeu.guessLetter('C'); // 3
+        jeu.guessLetter('F'); // 4
+        jeu.guessLetter('G'); // 5
+        jeu.guessLetter('H'); // 6
+        jeu.guessLetter('I'); // 7
+        
+        assertEquals(Etatjeu.Status.LOST, jeu.getStatus());
+        assertTrue(jeu.isGameOver());
+        assertEquals(7, jeu.getErrorCount());
+    }
+    
+    @Test
+    void testStateTransitionToWon() {
+        assertEquals(Etatjeu.Status.IN_PROGRESS, jeu.getStatus());
+        
+        jeu.guessLetter('P');
+        assertEquals(Etatjeu.Status.IN_PROGRESS, jeu.getStatus());
+        
+        jeu.guessLetter('E');
+        assertEquals(Etatjeu.Status.IN_PROGRESS, jeu.getStatus());
+        
+        jeu.guessLetter('N');
+        jeu.guessLetter('D');
+        jeu.guessLetter('U');
+        
+        assertEquals(Etatjeu.Status.WON, jeu.getStatus());
+    }
+    
+    @Test
+    void testStateTransitionToLost() {
+        assertEquals(Etatjeu.Status.IN_PROGRESS, jeu.getStatus());
+        
+        for (int i = 0; i < 6; i++) {
+            jeu.guessLetter((char)('A' + i));
+            assertEquals(Etatjeu.Status.IN_PROGRESS, jeu.getStatus());
+        }
+        
+        jeu.guessLetter('G'); // 7ème erreur
+        assertEquals(Etatjeu.Status.LOST, jeu.getStatus());
+    }
+    
+    @Test
+    void testGuessAfterGameOver() {
+        // Gagner la partie
+        jeu.guessLetter('P');
+        jeu.guessLetter('E');
+        jeu.guessLetter('N');
+        jeu.guessLetter('D');
+        jeu.guessLetter('U');
+        
+        // Essayer de jouer après la victoire
+        assertThrows(IllegalStateException.class, () -> {
+            jeu.guessLetter('A');
+        });
+    }
+
     
 }
